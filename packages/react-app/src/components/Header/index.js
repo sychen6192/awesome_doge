@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import React from 'react';
+import { ReactComponent as LogoIcon } from '../assets/logo.svg'
+
 
 const Button = styled.button`
   background-color: white;
@@ -19,7 +21,7 @@ const Button = styled.button`
   }
 `;
 
-const HeaderStyled = styled.header`
+const HeaderContainer = styled.header`
   background-color: #282c34;
   min-height: 70px;
   display: flex;
@@ -28,6 +30,28 @@ const HeaderStyled = styled.header`
   justify-content: flex-end;
   color: white;
 `;
+
+const HeaderLogo = styled.a`
+  color: #FFFFFF;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  > *:not(:first-child) {
+    margin-left: 4px;
+  }
+`
+
+const LogoTitle = styled.div`
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+`
+
+const LogoSubTitle = styled.div`
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: '1.7px'};
+`
 
 
 function WalletButton({ provider, loadWeb3Modal, logoutOfWeb3Modal }) {
@@ -48,8 +72,17 @@ function WalletButton({ provider, loadWeb3Modal, logoutOfWeb3Modal }) {
 
 export default function Header(props) {
     return (
-        <HeaderStyled>
+        <HeaderContainer>
+            <HeaderLogo href='/'>
+                <LogoIcon />
+                <div>
+                    <LogoTitle>xxxx</LogoTitle>
+                    <LogoSubTitle>
+                        xxx
+                    </LogoSubTitle>
+                </div>
+            </HeaderLogo>
             <WalletButton provider={props.provider} loadWeb3Modal={props.loadWeb3Modal} logoutOfWeb3Modal={props.logoutOfWeb3Modal} />
-        </HeaderStyled>
-    ); 
+        </HeaderContainer>
+    );
 }

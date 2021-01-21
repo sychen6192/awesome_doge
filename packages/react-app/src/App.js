@@ -22,10 +22,9 @@ function App() {
       console.log({ uniswapFactories: data.uniswapFactories });
     }
   }, [loading, error, data]);
-
   return (
     <div>
-      <Header />
+      <Header provider={provider} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal}/>
     </div>
   );
 }
