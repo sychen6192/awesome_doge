@@ -25,7 +25,6 @@ export default function Header({ provider, loadWeb3Modal, logoutOfWeb3Modal }) {
     useEffect(() => {
         const getNetwork = async () => {
             if (provider) {
-                console.log(provider)
                 const network = await provider.getNetwork()
                 setNetwork(network.name)
             }
@@ -40,6 +39,9 @@ export default function Header({ provider, loadWeb3Modal, logoutOfWeb3Modal }) {
             </a>
             <a className="item" href="/">
                 Funding Pool
+            </a>
+            <a className="item" href="/">
+                Stack
             </a>
             <div className="right menu">
                 <div className="item">

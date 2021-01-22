@@ -12,6 +12,7 @@ const commonContracts = {
   factory: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
   router01: "0xf164fC0Ec4E93095b804a4795bBe1e041497b92a",
   router02: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+  implementation: "0xe5265F0d60ebf4E7C72De7af830591509D58c58e"
 };
 
 export default {
@@ -66,10 +67,12 @@ export default {
   [RINKEBY_ID]: {
     pairs: {
       "DAI-WETH": "0x8B22F85d0c844Cf793690F6D9DFE9F11Ddb35449",
+      "SYC-WETH": "0xA05EF08d2d5bD0E22AA65f314377D60B6f3b6DBF"
     },
     tokens: {
       DAI: "0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735",
       WETH: "0xc778417E063141139Fce010982780140Aa0cD5Ab",
+      SYC: "0x8d54E0770A4CaB59366BC8b23217b2CFa7D7C5D2"
     },
     ...commonContracts,
   },

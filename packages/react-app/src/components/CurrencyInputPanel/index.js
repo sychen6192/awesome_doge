@@ -3,19 +3,21 @@ import { RINKEBY_ID, addresses, abis } from "@uniswap-v2-app/contracts";
 import { Contract } from "@ethersproject/contracts";
 import { ethers } from "ethers";
 import styled from 'styled-components';
-// import useWeb3Modal from "../../hooks/useWeb3Modal";
 import { ChainId, Token, WETH, Fetcher, Route } from '@uniswap/sdk'
+import useWeb3Modal from "../../hooks/useWeb3Modal";
 
 // const projectId = "66fbccb2856b40b3a622d925568379e9";
 // const projectSecret = "275ed56f36e440e0ab7cad94a3310aae";
 
 
 
-export default function CurrencyInputPanel({ provider }) {
-  const [ETHAmount, setETHAmount] = useState(0);
-  const [SYCAmount, setSYCAmount] = useState(0);
+export default function CurrencyInputPanel() {
+  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const [ETHAmount, setETHAmount] = useState('');
+  const [SYCAmount, setSYCAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [totoken, setTotoken] = useState(true);
+  const [approveAlready, setApproveAlready] = useState(false);
 
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export default function CurrencyInputPanel({ provider }) {
 
   async function getPairAmount() {
     try {
+  
       const SycWethExchangeContract = new Contract(addresses[RINKEBY_ID].pairs["SYC-WETH"], abis.pair, provider);
       const reserves = await SycWethExchangeContract.getReserves();
       // reserves[0] is SYC, reserves[1] is ETHER
@@ -65,12 +68,20 @@ export default function CurrencyInputPanel({ provider }) {
     setETHAmount('');
   }
 
+
   async function onSwap() {
     try {
+      let tx;
       setLoading(true);
       const signer = provider.getSigner()
       const implemetationContract = new Contract(addresses[RINKEBY_ID].implementation, abis.implemetation, signer);
-      let tx = await implemetationContract.swapETHToSyc({ value: ethers.utils.parseEther(ETHAmount) });
+      if (totoken) {
+        tx = await implemetationContract.swapETHToSyc({ value: ethers.utils.parseEther(ETHAmount) });
+      } else {
+        tx = await implemetationContract.swapSycForETH(ethers.utils.parseEther(SYCAmount));
+      }
+      // until transactionHash is mined.
+      await provider.waitForTransaction(tx.hash);
       setLoading(false);
       console.log(tx);
     } catch (err) {
@@ -78,6 +89,24 @@ export default function CurrencyInputPanel({ provider }) {
     }
     setLoading(false);
   }
+
+  async function onApprove() {
+    try {
+      setLoading(true);
+      const signer = provider.getSigner()
+      const erc20Contract = new Contract(addresses[RINKEBY_ID].tokens.SYC, abis.erc20.abi, signer);
+      let tx = await erc20Contract.approve(
+        addresses[RINKEBY_ID].implementation,
+        ethers.utils.parseEther(SYCAmount)
+      );
+      await provider.waitForTransaction(tx.hash);
+      setLoading(false);
+      setApproveAlready(true);
+    } catch (err) {
+      console.log(err)
+    }
+    setLoading(false);
+  } 
 
   if (totoken) {
     return (
@@ -89,13 +118,13 @@ export default function CurrencyInputPanel({ provider }) {
                 <label>Amount</label>
                 <div className="ui right labeled input">
                   <input type="text" onChange={e => setETHAmount(e.target.value)} value={ETHAmount} />
-                  <div class="ui dropdown label">
-                    <div class="text">ETH</div>
+                  <div className="ui dropdown label">
+                    <div className="text">ETH</div>
                   </div>
                 </div>
               </div>
               <div className="field four wide column center aligned">
-                <button class="ui icon basic button" style={{ boxShadow: 'none'}} onClick={changeDirection}>
+                <button className="ui icon basic button" style={{ boxShadow: 'none'}} onClick={changeDirection}>
                   <i className="fas fa-exchange-alt fa-2x"></i>
                 </button>
               </div>
@@ -103,7 +132,7 @@ export default function CurrencyInputPanel({ provider }) {
                 <label>Amount to be received (estimated)</label>
                 <div className="ui right labeled input">
                   <input type="text" disabled="disabled" value={SYCAmount} />
-                  <div class="ui basic label">
+                  <div className="ui basic label">
                     SYC
                   </div>
                 </div>
@@ -124,13 +153,13 @@ export default function CurrencyInputPanel({ provider }) {
                 <label>Amount</label>
                 <div className="ui right labeled input">
                   <input type="text" onChange={e => setSYCAmount(e.target.value)} value={SYCAmount} />
-                  <div class="ui dropdown label">
-                    <div class="text">SYC</div>
+                  <div className="ui dropdown label">
+                    <div className="text">SYC</div>
                   </div>
                 </div>
               </div>
               <div className="field four wide column center aligned">
-                <button class="ui icon basic button" style={{ boxShadow: 'none'}} onClick={changeDirection}>
+                <button className="ui icon basic button" style={{ boxShadow: 'none'}} onClick={changeDirection}>
                   <i className="fas fa-exchange-alt fa-2x"></i>
                 </button>
               </div>
@@ -138,14 +167,14 @@ export default function CurrencyInputPanel({ provider }) {
                 <label>Amount to be received (estimated)</label>
                 <div className="ui right labeled input">
                   <input type="text" disabled="disabled" value={ETHAmount} />
-                  <div class="ui basic label">
+                  <div className="ui basic label">
                     ETH
                   </div>
                 </div>
               </div>
             </div>
-            <div className={`ui submit button right floated ${loading ? 'loading' : ''}`} onClick={onSwap}>Swap</div>
-            <div className={`ui submit button right floated ${loading ? 'loading' : ''}`} onClick={onSwap}>Approve</div>
+            <div className={`ui submit button right floated ${loading ? 'loading' : ''} ${approveAlready ? '': 'disabled'}`} onClick={onSwap}>Swap</div>
+            <div className={`ui submit button right floated ${loading ? 'loading' : ''} ${approveAlready ? 'disabled': ''}`} onClick={onApprove}>Approve</div>
           </div>
         </div>
       </div>

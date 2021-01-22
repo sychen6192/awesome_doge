@@ -1,33 +1,32 @@
 import React from "react";
-// import { Contract } from "@ethersproject/contracts";
-// import { getDefaultProvider } from "@ethersproject/providers";
+import { Router, Route, Switch } from 'react-router-dom';
+import history from './history';
 import { useQuery } from "@apollo/react-hooks";
 
 // import { Body, Button, Header, Image, Link } from "./components";
 import Header from './components/Header';
 import Jumbotron from './components/Jumbotron';
 import CurrencyInputPanel from './components/CurrencyInputPanel'
-// import logo from "./ethereumLogo.png";
 import useWeb3Modal from "./hooks/useWeb3Modal";
+import swapPage from './components/Pages/swapPage';
 
 // import { MAINNET_ID, addresses, abis } from "@uniswap-v2-app/contracts";
 // import GET_AGGREGATED_UNISWAP_DATA from "./graphql/subgraph";
 
 
 function App() {
-  // const { loading, error, data } = useQuery(GET_AGGREGATED_UNISWAP_DATA);
   const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
 
-  // React.useEffect(() => {
-  //   if (!loading && !error && data && data.uniswapFactories) {
-  //     console.log({ uniswapFactories: data.uniswapFactories });
-  //   }
-  // }, [loading, error, data]);
   return (
     <div className="ui container">
-      <Header provider={provider} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal}/>
-      <Jumbotron title="Swap" description="Buy or sell SYC tokens. SYC tokens grant you proportional power in the mutual." />
-      <CurrencyInputPanel provider={provider}/>
+      <Router history={history}>
+        <div>
+          <Header provider={provider} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal} />
+          <Switch>
+            <Route path="/" exact component={swapPage} provider={provider} />
+          </Switch>
+        </div>
+      </Router>
     </div>
   );
 }
