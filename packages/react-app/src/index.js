@@ -5,6 +5,7 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import "./index.css";
 import App from "./App";
 
+
 // This is the official Uniswap v2 subgraph. You can replace it with your own, if you need to.
 // See all subgraphs: https://thegraph.com/explorer/
 const client = new ApolloClient({
