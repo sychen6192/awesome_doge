@@ -12,7 +12,8 @@ const commonContracts = {
   factory: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
   router01: "0xf164fC0Ec4E93095b804a4795bBe1e041497b92a",
   router02: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
-  implementation: "0xe5265F0d60ebf4E7C72De7af830591509D58c58e"
+  implementation: "0xe5265F0d60ebf4E7C72De7af830591509D58c58e",
+  policyFactory: "0x802f46D3F619f4F46bb0184975bC28fb51c58f0A"
 };
 
 export default {

@@ -4,7 +4,6 @@ import { Contract } from "@ethersproject/contracts";
 import { ethers } from "ethers";
 import styled from 'styled-components';
 import { ChainId, Token, WETH, Fetcher, Route } from '@uniswap/sdk'
-import useWeb3Modal from "../../hooks/useWeb3Modal";
 
 // const projectId = "66fbccb2856b40b3a622d925568379e9";
 // const projectSecret = "275ed56f36e440e0ab7cad94a3310aae";
@@ -12,12 +11,13 @@ import useWeb3Modal from "../../hooks/useWeb3Modal";
 
 
 export default function CurrencyInputPanel() {
-  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
   const [ETHAmount, setETHAmount] = useState('');
   const [SYCAmount, setSYCAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [totoken, setTotoken] = useState(true);
   const [approveAlready, setApproveAlready] = useState(false);
+
 
 
   useEffect(() => {
@@ -107,6 +107,12 @@ export default function CurrencyInputPanel() {
     }
     setLoading(false);
   } 
+
+  if (!provider) {
+    return (
+      <div>Loading...</div>
+    )
+  }
 
   if (totoken) {
     return (

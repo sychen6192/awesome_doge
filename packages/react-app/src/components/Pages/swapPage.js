@@ -3,11 +3,11 @@ import Jumbotron from '../Jumbotron';
 import CurrencyInputPanel from '../CurrencyInputPanel';
 
 
-export default function swapPage({ provider }) {
+export default function SwapPage() {
     return (
         <div>
             <Jumbotron title="Swap" description="Buy or sell SYC tokens. SYC tokens grant you proportional power in the mutual." />
-            <CurrencyInputPanel provider={provider} />
+            <CurrencyInputPanel />
         </div>
     );
 }
