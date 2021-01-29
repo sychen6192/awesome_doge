@@ -1,11 +1,12 @@
 import React from "react";
-import { BrowserRouter, Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 // import { Router, Route, Link, hashHistory } from 'react-router'
 import history from './history';
-import { useQuery } from "@apollo/react-hooks";
 import Header from './components/Header';
 import SwapPage from './components/Pages/SwapPage';
 import PolicyPage from './components/Pages/PolicyPage';
+import StakePage from './components/Pages/StakePage';
+import StakeItem from './components/Pages/StakeItem';
 import useWeb3Modal from "./hooks/useWeb3Modal";
 
 
@@ -15,12 +16,14 @@ function App() {
   return (
     <div className="ui container">
       <Header provider={provider} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal}/>
-      <BrowserRouter>
+      <Router history={history}>
           <Switch>
             <Route path="/" exact component={SwapPage} />
             <Route path="/policy/new" exact component={PolicyPage} />
+            <Route path="/staking" exact component={StakePage} />
+            <Route path="/staking/:id" exact component={StakeItem} />
           </Switch>
-      </BrowserRouter>
+      </Router>
     </div>
   );
 }

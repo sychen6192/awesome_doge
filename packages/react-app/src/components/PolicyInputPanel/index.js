@@ -9,6 +9,7 @@ import { RINKEBY_ID, addresses, abis } from "@uniswap-v2-app/contracts";
 export default function PolicyInputPanel() {
     const [loading, setLoading] = useState(false);
     const [policyName, setPolicyName] = useState(0);
+    const [policyType, setpolicyType] = useState(0);
     const [policyContent, setPolicyContent] = useState(0);
     const [policyPremium, setPolicyPremium] = useState(0);
     const [policyDuration, setPolicyDuration] = useState(0);
@@ -31,6 +32,7 @@ export default function PolicyInputPanel() {
             console.log(policyFactoryContract)
             tx = await policyFactoryContract.createPolicy(
                 policyName,
+                policyType,
                 policyContent,
                 policyPremium,
                 policyDuration
@@ -52,6 +54,17 @@ export default function PolicyInputPanel() {
                     <label>Policy Name</label>
                     <input type="text" placeholder="Policy Name" onChange={e => setPolicyName(e.target.value)}/>
                 </div>
+                <div className="field">
+                    <label>Policy Type</label>
+                    <select multiple="" className="ui dropdown" onChange={e => setpolicyType(e.target.value)}>
+                    <option value="">Select Type</option>
+                    <option value="Cyper Insurance">Cyper Insurance</option>
+                    <option value="Health Insurance">Health Insurance</option>
+                    <option value="Investment Insurance">Investment Insurance</option>
+                    <option value="Auto Insurance">Auto Insurance</option>
+                    </select>
+                </div>
+                
                 <div className="field">
                     <label>Policy Content</label>
                     <input type="text" placeholder="Policy Content" onChange={e => setPolicyContent(e.target.value)}/>

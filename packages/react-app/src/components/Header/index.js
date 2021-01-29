@@ -42,7 +42,7 @@ export default function Header({provider, loadWeb3Modal, logoutOfWeb3Modal}) {
             <a className="item" href="/">
                 Funding Pool
             </a>
-            <a className="item" href="/policy/staking">
+            <a className="item" href="/staking">
                 Staking
             </a>
             <a className="item" href="/policy/new">

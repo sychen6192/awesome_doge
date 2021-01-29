@@ -12,6 +12,11 @@
 				"type": "string"
 			},
 			{
+				"internalType": "string",
+				"name": "policyType",
+				"type": "string"
+			},
+			{
 				"internalType": "uint256",
 				"name": "policyPremium",
 				"type": "uint256"
