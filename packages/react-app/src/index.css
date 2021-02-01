@@ -2,7 +2,8 @@ body {
   margin: 0;
    -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* background-color: #282c34; */
+  font-family: 'Roboto', sans-serif;
+  background-color: #F2F5FA;
 }
 
 code {
@@ -13,8 +14,8 @@ code {
 
 .fa-exchange-alt {
   border-radius: 50%;
-  -webkit-transition: -webkit-transform .8s ease-in-out;
-          transition:         transform .8s ease-in-out;
+  -webkit-transition: -webkit-transform .2s ease-in-out;
+          transition:         transform .2s ease-in-out;
 }
 .fa-exchange-alt:hover {
   -webkit-transform: rotate(180deg);

@@ -14,7 +14,7 @@ function App() {
   const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
 
   return (
-    <div className="ui container">
+    <div>
       <Header provider={provider} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal}/>
       <Router history={history}>
           <Switch>

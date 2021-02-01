@@ -15,6 +15,7 @@ export default function StakeItem(props) {
     const [topupValue, setTopupValue] = useState('');
     const [loading, setLoading] = useState(false);
 
+
     useEffect(() => {
         const getPolicies = async () => {
             const provider = new ethers.providers.Web3Provider(window.ethereum)

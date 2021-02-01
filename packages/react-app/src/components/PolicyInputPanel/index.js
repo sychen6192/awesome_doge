@@ -3,10 +3,32 @@ import { ethers } from "ethers";
 import { Contract } from "@ethersproject/contracts";
 import styled from 'styled-components';
 import { RINKEBY_ID, addresses, abis } from "@uniswap-v2-app/contracts";
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { makeStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
 
+
+const useStyles = makeStyles((theme) => ({
+    container: {
+      marginTop: "20px",
+      width: '800px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      backgroundColor: 'white',
+      padding: '30px 30px 30px 30px',
+      borderRadius: '10px'
+    },
+}));
 
 
 export default function PolicyInputPanel() {
+    const classes = useStyles()
+
     const [loading, setLoading] = useState(false);
     const [policyName, setPolicyName] = useState(0);
     const [policyType, setpolicyType] = useState(0);
@@ -48,9 +70,69 @@ export default function PolicyInputPanel() {
         }
 
     return (
-        <div className="ui container" style={{ marginTop: "20px" }}>
-            <div className={`ui form ${loading ? 'loading': ''}`}>
-                <div className="field">
+     <Grid container className={classes.container} gutterBottom>
+    <React.Fragment>
+      <Typography variant="h6" gutterBottom>
+        Create Policy
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="policyName"
+            name="policyName"
+            label="policyName"
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+            <InputLabel id="policyType">policyType</InputLabel>
+            <Select
+            labelId="policyType"
+            id="policyType"
+            value={policyType}
+            onChange={e => setpolicyType(e.target.value)}
+            fullWidth
+            >
+            <MenuItem value="">
+                <em>None</em>
+            </MenuItem>
+            <MenuItem value="Cyper Insurance">Cyper Insurance</MenuItem>
+            <MenuItem value="Health Insurance">Health Insurance</MenuItem>
+            <MenuItem value="Investment Insurance">Investment Insurance</MenuItem>
+            <MenuItem value="Auto Insurance">Auto Insurance</MenuItem>
+            </Select>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            required
+            id="policyContent"
+            name="policyContent"
+            label="policyContent"
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="Policypremium"
+            name="Policypremium"
+            label="Policypremium"
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField id="state" name="state" label="State/Province/Region" fullWidth />
+        </Grid>
+      </Grid>
+    </React.Fragment>
+        </Grid>
+    )
+}
+
+
+
+                {/* <div className="field">
                     <label>Policy Name</label>
                     <input type="text" placeholder="Policy Name" onChange={e => setPolicyName(e.target.value)}/>
                 </div>
@@ -79,8 +161,4 @@ export default function PolicyInputPanel() {
                 </div>
                 <button 
                     className="ui button right floated"
-                    onClick={createPolicy}>Create</button>
-            </div>
-        </div>
-    )
-}
+                    onClick={createPolicy}>Create</button> */}

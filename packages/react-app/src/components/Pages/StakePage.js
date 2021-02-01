@@ -5,6 +5,14 @@ import { ethers } from "ethers";
 import { Contract } from "@ethersproject/contracts";
 import { RINKEBY_ID, addresses, abis } from "@uniswap-v2-app/contracts";
 import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
 
 export default function StakePage() {
@@ -35,29 +43,32 @@ export default function StakePage() {
         }
         return Object.values(policies).map((element, idx) => {
             return (
-                <div className="column" key={idx} >
-                        <div className="ui segment" style={{borderRadius: '15px'}} >
-                            <h4>{element[0]}</h4>
-                            <p>Insurance Type: <span style={{float: 'right'}}>{element[1]}</span></p>
-                            <p>Stacked: <span style={{float: 'right'}}>{element[6].toString()} SYC</span></p>
-                            <p>Insurance Content: <span style={{float: 'right'}}>{element[2]}</span></p>
-                            <Link className="positive ui fluid button" to={`/staking/${idx}`}>Stake</Link>
-                        </div>
-                </div>
+                <Grid key={idx} item>
+                    <Card variant="outlined">
+                <CardContent>
+                  <Typography color="textSecondary" gutterBottom>
+                    {element[0]}
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    Insurance Type: <span style={{float: 'right'}}>{element[1]}</span>
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Stacked: <span style={{float: 'right'}}>{element[6].toString()} SYC</span>
+                  </Typography>
+
+                </CardContent>
+                <CardActions>
+                    <Button component={ Link } to={`/staking/${idx}`} variant="contained" color="primary">
+                        Stack
+                    </Button>
+                </CardActions>
+              </Card>
+                </Grid>
+            
             );
         })
 
     }
-
-    // async function onStake(idx) {
-    //     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    //     const signer = provider.signer();
-    //     const policyFactoryContract = new Contract(addresses[RINKEBY_ID].policyFactory, abis.policyFactory, provider);
-    //     const policyAddress = await policyFactoryContract.deployedPolicies(idx);
-    //     const policy = new Contract(policyAddress, abis.policy, signer);
-    //     await policy.createStake()
-
-    // }
 
 
     return (
@@ -65,9 +76,12 @@ export default function StakePage() {
             <Jumbotron
                 title="Stake"
                 description="Earn rewards by staking SYC on policies you want to engage." />
-            <div className="ui three column grid" style={{ marginTop: "20px" }}>
-                {renderList(policies)}
-            </div>
+            <Container style={{ marginTop: "20px" }}>
+                <Grid container style={{ marginTop: "20px" }} spacing={5}>
+                    {renderList(policies)}
+                </Grid>
+            </Container>
+
         </div>
     );
 }
