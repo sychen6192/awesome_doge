@@ -14,6 +14,8 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
+import ReactDOM from 'react-dom';
+ 
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -90,14 +92,17 @@ export default function Header({ provider, loadWeb3Modal, logoutOfWeb3Modal }) {
             <Link variant="button" href="/" className={classes.link}>
               SWAP
             </Link>
-            <Link variant="button" href="#" className={classes.link}>
-              Funding Pool
+            <Link variant="button" href="/pool" className={classes.link}>
+              Pool
             </Link>
             <Link variant="button" href="/staking" className={classes.link}>
-                Staking
+              Project
             </Link>
             <Link variant="button" href="/policy/new" className={classes.link}>
-                Create Policy
+              Propose
+            </Link>
+            <Link variant="button" href="/register" className={classes.link}>
+              Register
             </Link>
           </nav>
             <WalletButton provider={provider} loadWeb3Modal={loadWeb3Modal} logoutOfWeb3Modal={logoutOfWeb3Modal} />

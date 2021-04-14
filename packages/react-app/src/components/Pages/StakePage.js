@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { ethers } from "ethers";
 import { Contract } from "@ethersproject/contracts";
 import { RINKEBY_ID, addresses, abis } from "@uniswap-v2-app/contracts";
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from "@material-ui/core/Link";
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
@@ -24,7 +25,7 @@ export default function StakePage() {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const policyFactoryContract = new Contract(addresses[RINKEBY_ID].policyFactory, abis.policyFactory, provider);
             const policies = await policyFactoryContract.getDeloyedPolicies();
-
+            console.log(policies)
             const allPolicies = await Promise.all(
                 policies
                     .map((address, index) => {
@@ -42,24 +43,38 @@ export default function StakePage() {
             return <div>Loading...</div>
         }
         return Object.values(policies).map((element, idx) => {
+            console.log(element)
             return (
-                <Grid key={idx} item>
+                <Grid key={idx} item xs={4}>
                     <Card variant="outlined">
                 <CardContent>
                   <Typography color="textSecondary" gutterBottom>
-                    {element[0]}
                   </Typography>
                   <Typography variant="h5" component="h2">
-                    Insurance Type: <span style={{float: 'right'}}>{element[1]}</span>
+                    {element[0]}
                   </Typography>
                   <Typography color="textSecondary">
-                    Stacked: <span style={{float: 'right'}}>{element[6].toString()} SYC</span>
+                    <Link href={`https://ipfs.io/ipfs/${element[2]}`} rel="noopener" target="_blank" style={{ textDecoration: 'none' }}>
+                        {element[2]}
+                    </Link>
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Insurance base: <span style={{float: 'right'}}>{element[1].toString() / 10**18} Ether</span>
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Stacked: <span style={{float: 'right'}}>{element[3].toString() / 10**18} SYC</span>
                   </Typography>
 
                 </CardContent>
                 <CardActions>
-                    <Button component={ Link } to={`/staking/${idx}`} variant="contained" color="primary">
+                    <Button component={ RouterLink } to={`/staking/${idx}`} variant="contained" color="primary">
                         Stack
+                    </Button>
+                    <Button component={ RouterLink } to={`/claims/${idx}`} variant="contained" color="secondary">
+                        Request
+                    </Button>
+                    <Button component={ RouterLink } to={`/stakeholders/${idx}`} variant="contained" color="secondary">
+                        Stakeholders
                     </Button>
                 </CardActions>
               </Card>

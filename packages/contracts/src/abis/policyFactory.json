@@ -3,12 +3,7 @@
 		"inputs": [
 			{
 				"internalType": "string",
-				"name": "policyName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "policyContent",
+				"name": "policyTitle",
 				"type": "string"
 			},
 			{
@@ -18,12 +13,27 @@
 			},
 			{
 				"internalType": "uint256",
-				"name": "policyPremium",
+				"name": "policyBase",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "policyDuration",
+				"name": "policyStartTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "policyEndTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "tokenURI",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "policyDeadline",
 				"type": "uint256"
 			}
 		],
@@ -31,6 +41,11 @@
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	},
 	{
 		"inputs": [
@@ -59,6 +74,25 @@
 				"internalType": "address[]",
 				"name": "",
 				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "policies",
+		"outputs": [
+			{
+				"internalType": "contract Policy",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",

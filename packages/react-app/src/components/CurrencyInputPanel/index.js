@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
-import Button from '@material-ui/core/Button';
+import { Button, CircularProgress } from '@material-ui/core';
 import axios from 'axios';
 
 
@@ -47,6 +47,8 @@ const useStyles = makeStyles((theme) => ({
   },
   pos: {
     marginBottom: 12,
+    align: 'right',
+
   },
   FormContent: {
     padding: '0.5rem 1rem',
@@ -97,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '50px',
     float: 'right',
     width: '100px',
+    fontSize: '14px',
     loading: ''
   }
 }));
@@ -109,8 +112,8 @@ export default function CurrencyInputPanel() {
   const provider = new ethers.providers.Web3Provider(window.ethereum)
   const [ETHAmount, setETHAmount] = useState('');
   const [SYCAmount, setSYCAmount] = useState('');
-  const [ETHPrice, setETHPrice] = useState(0);
   const [SYCPrice, setSYCPrice] = useState(0);
+  const [ETHPrice, setETHPrice] = useState(0);
   const [loading, setLoading] = useState(false);
   const [totoken, setTotoken] = useState(true);
   const [approveAlready, setApproveAlready] = useState(false);
@@ -120,10 +123,17 @@ export default function CurrencyInputPanel() {
       async function getNetworkId() {
           const provider = new ethers.providers.Web3Provider(window.ethereum)
           const networkId = await provider.getNetwork()
-          setNetworkId(networkId.chainId)
-      
+          setNetworkId(networkId.chainId) 
+      }
+      async function getApproveState() {
+        const SycContract = new Contract(addresses[RINKEBY_ID].tokens.SYC, abis.erc20.abi, provider);
+        const account = await provider.listAccounts()
+        const approveState = await SycContract.allowance(account[0], addresses[RINKEBY_ID].implementation)
+
+        approveState.gte('5742700000000000000000000') ? setApproveAlready(true):setApproveAlready(false)
       }
       getNetworkId();
+      getApproveState();
   }, [])
 
 
@@ -150,7 +160,7 @@ export default function CurrencyInputPanel() {
     const getSYCPrice = async () => {
       const SycWethExchangeContract = new Contract(addresses[RINKEBY_ID].pairs["SYC-WETH"], abis.pair, provider);
       const reserves = await SycWethExchangeContract.getReserves();
-      // reserves[0] is SYC, reserves[1] is ETHER
+      // reserves[0] is ETHER, reserves[1] is SYCoin
       const k = reserves[0].mul(reserves[1])
       if (totoken) {
         const y = ethers.utils.parseUnits('0.997', "ether").add(reserves[0])
@@ -178,13 +188,13 @@ export default function CurrencyInputPanel() {
       // fee to dev 0.3%
       if (totoken) {
         ETHAmountSubFee = (parseFloat(ETHAmount) * 0.997).toString();
-        y = ethers.utils.parseUnits(ETHAmountSubFee, "ether").add(reserves[1])
-        x = ethers.utils.formatEther(reserves[0].sub(k.div(y)));
+        y = ethers.utils.parseUnits(ETHAmountSubFee, "ether").add(reserves[0])
+        x = ethers.utils.formatEther(reserves[1].sub(k.div(y)));
 
       } else {
         SYCAmountSubFee = (parseFloat(SYCAmount) * 0.997).toString();
-        y = ethers.utils.parseUnits(SYCAmountSubFee, "ether").add(reserves[0])
-        x = ethers.utils.formatEther(reserves[1].sub(k.div(y)));
+        y = ethers.utils.parseUnits(SYCAmountSubFee, "ether").add(reserves[1])
+        x = ethers.utils.formatEther(reserves[0].sub(k.div(y)));
 
       }
       return x.toString();
@@ -229,7 +239,7 @@ export default function CurrencyInputPanel() {
       const erc20Contract = new Contract(addresses[RINKEBY_ID].tokens.SYC, abis.erc20.abi, signer);
       let tx = await erc20Contract.approve(
         addresses[RINKEBY_ID].implementation,
-        ethers.utils.parseEther(SYCAmount)
+        '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
       );
       await provider.waitForTransaction(tx.hash);
       setLoading(false);
@@ -308,9 +318,8 @@ export default function CurrencyInputPanel() {
                       SYC
                     </Button>
                     </div>
-                    
                     <Typography className={classes.pos} color="textSecondary" align='right'>
-                     1 SYC = {parseFloat(SYCPrice).toFixed(4)} ETH
+                     {SYCAmount ? `${parseFloat(SYCAmount / ETHAmount).toFixed(3)} SYC per ETH`: '🤔 SYC per ETH'}
                     </Typography>
                   </Card>
                 </Grid>
@@ -320,7 +329,9 @@ export default function CurrencyInputPanel() {
                   variant="outlined" 
                   className={classes.swapButton}
                   onClick={e => onSwap()}
-                  >SWAP
+                  >
+                  {loading && <CircularProgress size={14} />}
+                  {!loading && 'SWAP'}   
                 </Button>
               </div> 
             </CardContent>
@@ -359,7 +370,7 @@ export default function CurrencyInputPanel() {
                   </div>
                   
                   <Typography className={classes.pos} color="textSecondary" align='right'>
-                    ~${(SYCAmount * ETHPrice / SYCPrice ).toFixed(2)}
+                    ~${ETHAmount ? `${(ETHAmount / SYCAmount * ETHPrice).toFixed(2)}`: '0.00'}
                   </Typography>
                 </Card> 
               </Grid>
@@ -390,7 +401,7 @@ export default function CurrencyInputPanel() {
                   </Button>
                   </div>
                   <Typography className={classes.pos} color="textSecondary" align='right'>
-                   1 ETH = {(parseFloat(SYCPrice)).toFixed(4)} SYC
+                  {ETHAmount ? `${parseFloat(ETHAmount / SYCAmount).toFixed(6)} ETH per SYC`: '🤔 ETH per SYC'}
                   </Typography>
                 </Card>
               </Grid>
@@ -400,14 +411,14 @@ export default function CurrencyInputPanel() {
               variant="outlined" 
               className={classes.swapButton}
               onClick={e => onSwap()}
-              disabled={`${approveAlready ? '': 'disabled'}`}
+              disabled={!approveAlready}
               >SWAP
             </Button>
             <Button style={{ marginRight: '10px' }}
               variant="outlined" 
               className={classes.swapButton}
               onClick={e => onApprove()}
-              disabled={`${approveAlready ? 'disabled': ''}`}
+              disabled={approveAlready}
               >Approve
             </Button> 
             </div>
