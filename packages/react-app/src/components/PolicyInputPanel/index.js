@@ -222,6 +222,7 @@ export default function PolicyInputPanel() {
             <MenuItem value="Health Insurance">Health Insurance</MenuItem>
             <MenuItem value="Investment Insurance">Investment Insurance</MenuItem>
             <MenuItem value="Auto Insurance">Auto Insurance</MenuItem>
+            <MenuItem value="Oracle BTC">Oracle BTC insurance</MenuItem>
             </TextField>
         </Grid>
         

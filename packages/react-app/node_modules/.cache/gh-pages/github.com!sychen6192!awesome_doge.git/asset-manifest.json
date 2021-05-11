@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/awesome_doge/static/css/main.b0c4f4fb.chunk.css",
+    "main.js": "/awesome_doge/static/js/main.a44e9195.chunk.js",
+    "main.js.map": "/awesome_doge/static/js/main.a44e9195.chunk.js.map",
+    "runtime-main.js": "/awesome_doge/static/js/runtime-main.555581d9.js",
+    "runtime-main.js.map": "/awesome_doge/static/js/runtime-main.555581d9.js.map",
+    "static/js/2.ade57f91.chunk.js": "/awesome_doge/static/js/2.ade57f91.chunk.js",
+    "static/js/2.ade57f91.chunk.js.map": "/awesome_doge/static/js/2.ade57f91.chunk.js.map",
+    "index.html": "/awesome_doge/index.html",
+    "precache-manifest.5f7dbeff974bd75174b3c569f0a83fc6.js": "/awesome_doge/precache-manifest.5f7dbeff974bd75174b3c569f0a83fc6.js",
+    "service-worker.js": "/awesome_doge/service-worker.js",
+    "static/css/main.b0c4f4fb.chunk.css.map": "/awesome_doge/static/css/main.b0c4f4fb.chunk.css.map",
+    "static/js/2.ade57f91.chunk.js.LICENSE.txt": "/awesome_doge/static/js/2.ade57f91.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.555581d9.js",
+    "static/js/2.ade57f91.chunk.js",
+    "static/css/main.b0c4f4fb.chunk.css",
+    "static/js/main.a44e9195.chunk.js"
+  ]
+}

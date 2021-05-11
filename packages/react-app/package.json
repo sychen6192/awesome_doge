@@ -1,7 +1,7 @@
 {
   "name": "@uniswap-v2-app/react-app",
   "version": "1.0.0",
-  "homepage": "./",
+  "homepage": "http://sychen6192.github.io/awesome_doge",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -41,6 +41,7 @@
     "eslint": "^6.8.0",
     "eslint-plugin-flowtype": "^4.6.0",
     "ethers": "^5.0.26",
+    "gh-pages": "^3.1.0",
     "graphql": "^14.7.0",
     "ipfs-http-client": "^45.0.0",
     "react": "16.14.0",
@@ -59,6 +60,9 @@
     "eject": "react-scripts eject",
     "ipfs": "yarn build && node scripts/ipfs.js",
     "start": "react-scripts start",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+
   }
 }
