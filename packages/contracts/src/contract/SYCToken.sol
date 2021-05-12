@@ -1,88 +1,43 @@
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.6.0;
-
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.0.0/contracts/token/ERC20/ERC20.sol";
+import "./Registry.sol";
 
 contract SYCToken is ERC20 {
-    constructor(uint256 initialSupply, address _minter, address _factoryAddress) public ERC20 ("SYC coin", "SYC") {
-        factoryAddress = _factoryAddress;
+    
+    mapping(address=>bool) public allowToMintToken;
+    address public adminAddress;
+    address public factoryAddress;
+    Registry immutable registry;
+
+    constructor(uint256 initialSupply, address _minter) public ERC20 ("SYC coin", "SYC") {
+        registry = Registry(0xF5b79544Affa9461aa00954707887E423BCd0E85);
         _mint(_minter, initialSupply);
+        adminAddress = msg.sender;
     }
     
-    address[] internal stakeholders;
-    mapping(address => uint256) internal stakes;
-    mapping (address => bool) public allowToMintToken;
-    address factoryAddress;
-
-
-    modifier onlyOwner() {
-        require(allowToMintToken[msg.sender], 'You are not valid policy address.');
+     modifier onlyPolicy() {
+        require(allowToMintToken[msg.sender] == true, 'You are not valid policy address.');
         _;
     }
+    
+    function setFactoryAddress() public {
+        require(msg.sender == adminAddress, 'only admin');
+        factoryAddress = factoryAddress = registry.factoryAddress();
+    }
+
     
     function addPolicyAddress(address policyAddress)
         public
     {
-        require(msg.sender == factoryAddress);
+        require(msg.sender == factoryAddress, 'factoryAddress only');
         allowToMintToken[policyAddress] = true;
     }
-
     
-    function isStakeholder(address _address)
-       public
-       view
-       returns(bool, uint256)
-   {
-       for (uint256 s = 0; s < stakeholders.length; s += 1){
-           if (_address == stakeholders[s]) return (true, s);
-       }
-       return (false, 0);
-   }
-   
-   function addStakeholder(address _stakeholder)
-       public
-   {
-       (bool _isStakeholder, ) = isStakeholder(_stakeholder);
-       if(!_isStakeholder) stakeholders.push(_stakeholder);
-   }
-   
-   
-   function stakeOf(address _stakeholder)
-       public
-       view
-       returns(uint256)
-   {
-       return stakes[_stakeholder];
-   }
-    
-    function totalStakes()
-       public
-       view
-       returns(uint256)
-   {
-       uint256 _totalStakes = 0;
-       for (uint256 s = 0; s < stakeholders.length; s += 1){
-           _totalStakes = _totalStakes.add(stakes[stakeholders[s]]);
-       }
-       return _totalStakes;
-   }
-   
-    function createStake(address insurer, uint256 _stake)
-       public
-   {
-       _burn(insurer, _stake);
-       if(stakes[insurer] == 0) addStakeholder(insurer);
-       stakes[insurer] = stakes[insurer].add(_stake);
-   }
-   
-   function withDrawClaim(address insurer, uint256 _claimAmount)
-       public
-       onlyOwner
-   {
-       (bool _isStakeholder, ) = isStakeholder(insurer);
-       require(_isStakeholder, 'You are not stakeholders');
-       _mint(insurer, _claimAmount);
-   }
-   
-
-    
+    function issueToken(address insurer, uint sycAmount)
+        public
+        onlyPolicy
+    {
+        _mint(insurer, sycAmount);
+    }
 }
